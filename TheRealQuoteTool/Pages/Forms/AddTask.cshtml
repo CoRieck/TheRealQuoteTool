@@ -1,0 +1,91 @@
+﻿@page
+@model TheRealQuoteTool.Pages.Forms.AddTaskModel
+@{
+    ViewData["Title"] = "Adding Task";
+}
+
+<h1>Add <span id="TaskTitle"></span> to Quote @Model.TaskModel.quoteID</h1>
+
+<hr />
+
+@foreach (var item in Model.TaskLookupList)
+{
+<div class="list-group">
+    <button id="@item.payRate-@item.Title" onclick="UpdateTask(this.id)" class="list-group-item list-group-item-action" >
+        <h5 class="card-title">@item.Title   |   $@item.payRate per Hour</h5>
+        <p class="card-text">@item.description</p>
+        <!--<a href="/Forms/AddTask?quoteID=@Model.TaskModel.quoteID&payRate=@item.payRate&title=@item.Title" class="btn btn-outline-primary">Select</a>-->
+    </button>
+</div>
+}
+
+<hr />
+
+<div>
+    <form method="post">
+        <div class="row">
+            <div class="col">
+                <input id="Hours" type="number" class="form-control" placeholder="Hours" onblur="UpdateCost()" required>
+            </div>
+            <div class="col">
+                <input id="Discount" type="number" class="form-control" onblur="UpdateCost()" placeholder="% Discount (Optional)">
+            </div>
+        </div>
+        <hr />
+        <div class="form-row" style="margin-bottom:20px;">
+            <div class="col">
+                <input type="submit" value="Add Task" class="btn btn-primary" asp-page-handler="AddTask" />
+                <input type="hidden" name="totalHours" value="0">
+                <input type="hidden" name="totalPrice" value="0">
+                <input type="hidden" name="taskTitle" value="">
+                <input type="hidden" name="quoteID" value="@Model.TaskModel.quoteID">
+            </div>
+            <div class="col">
+                <h3>Total Cost : <span value="" id="live_update"></span></h3>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section scripts{ 
+<script type="text/javascript">
+    var payRate = 0;
+    var title = "";
+    function UpdateCost()
+    {
+        var Hours = parseFloat(document.getElementById("Hours").value);
+        var Discount = document.getElementById("Discount").value;
+        if (Discount == "" || Discount == null) {
+            Discount = 0
+        }
+        else {
+            Discount = parseFloat(Discount) * 0.01
+        }
+        var Total = (payRate * Hours) - (payRate * Hours * Discount);
+        document.getElementById("live_update").innerHTML = Total;
+        UpdateHidden(Total);
+    }
+
+    function UpdateTask(clicked_id)
+    {
+        var btn = document.getElementById(clicked_id);
+        var results = clicked_id.split("-");
+        title = document.getElementById("TaskTitle").innerHTML = results.slice(1).join("");
+        payRate = parseFloat(results[0]);
+        UpdateCost();
+    }
+
+    function UpdateHidden(Total)
+    {
+        var Hours = parseFloat(document.getElementById("Hours").value);
+        var hiddenHours = document.getElementsByName("totalHours")[0];
+        var hiddenTotal = document.getElementsByName("totalPrice")[0];
+        var hiddenTitle = document.getElementsByName("taskTitle")[0];
+        hiddenHours.setAttribute("value", Hours);
+        hiddenTotal.setAttribute("value", Total);
+        hiddenTitle.setAttribute("value", title);
+    }
+</script>
+}
+

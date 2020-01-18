@@ -15,5 +15,7 @@ namespace TheRealQuoteTool.Data
         }
 
         public DbSet<TheRealQuoteTool.Models.QuoteModel> QuoteModel { get; set; }
+        public DbSet<TheRealQuoteTool.Models.TaskModel> TaskModel { get; set; }
+        public DbSet<TheRealQuoteTool.Models.TaskLookupModel> TaskLookupModel { get; set; }
     }
 }

@@ -20,13 +20,17 @@ namespace TheRealQuoteTool
         }
 
         public IList<QuoteModel> QuoteModelList { get; set; }
+        public IList<TaskModel> TaskModelList { get; set; }
+
+
+
 
         [BindProperty]
         public QuoteModel QuoteModel { get; set; }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostNewQuote()
         {
             if (!ModelState.IsValid)
             {
@@ -42,10 +46,18 @@ namespace TheRealQuoteTool
 
             return RedirectToPage("/Forms/AddQuote");
         }
-        public async Task OnGetAsync()
+
+        public RedirectToPageResult OnPostNewTask(int ID)
+        {
+            return RedirectToPage("/Forms/AddTask", new { quoteID  = ID});
+        }
+
+            public async Task OnGetAsync()
         {
             QuoteModelList = await _context.QuoteModel.ToListAsync();
+            TaskModelList = await _context.TaskModel.ToListAsync();
         }
+
 
     }
 }

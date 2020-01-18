@@ -21,9 +21,8 @@
                 @Html.DisplayNameFor(model => model.QuoteModelList[0].totalCost)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.QuoteModelList[0].dateCreated)
+                @Html.DisplayNameFor(model => model.QuoteModelList[0].dateCreated) | ID
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -43,9 +42,34 @@
                     @Html.DisplayFor(modelItem => item.totalCost)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.dateCreated)
+                    @Html.DisplayFor(modelItem => item.dateCreated) | @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    <form method="post" asp-page-handler="NewTask">
+                        <input type="hidden" name="ID" value="@item.ID">
+                        <button class="btn btn-outline-primary">Add Task</button>
+                    </form>
                 </td>
             </tr>
+            @foreach (var foo in Model.TaskModelList)
+            {
+                if (foo.quoteID == item.ID)
+                {
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => foo.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => foo.totalHours)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => foo.totalPrice)
+                        </td>
+                    </tr>
+                }
+            }
         }
     </tbody>
 </table>
@@ -57,33 +81,16 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="QuoteModel.Client" class="control-label"></label>
-                <input asp-for="QuoteModel.Client" class="form-control" />
+                <input asp-for="QuoteModel.Client" placeholder="Client" class="form-control" />
                 <span asp-validation-for="QuoteModel.Client" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="QuoteModel.Author" class="control-label"></label>
-                <input asp-for="QuoteModel.Author" class="form-control" />
+                <input asp-for="QuoteModel.Author" placeholder="Author" class="form-control" />
                 <span asp-validation-for="QuoteModel.Author" class="text-danger"></span>
-                <!--</div>
-    <div class="form-group">
-        <label asp-for="QuoteModel.totalHours" class="control-label"></label>
-        <input asp-for="QuoteModel.totalHours" class="form-control" />
-        <span asp-validation-for="QuoteModel.totalHours" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="QuoteModel.totalCost" class="control-label"></label>
-        <input asp-for="QuoteModel.totalCost" class="form-control" />
-        <span asp-validation-for="QuoteModel.totalCost" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="QuoteModel.dateCreated" class="control-label"></label>
-        <input asp-for="QuoteModel.dateCreated" class="form-control" />
-        <span asp-validation-for="QuoteModel.dateCreated" class="text-danger"></span>
-    </div>-->
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-</form>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create New Quote" class="btn btn-primary" asp-page-handler="NewQuote"/>
+            </div>
+        </form>
     </div>
 </div>
