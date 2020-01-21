@@ -67,6 +67,12 @@
                         <td>
                             @Html.DisplayFor(modelItem => foo.totalPrice)
                         </td>
+                        <td>
+                            <form method="post" asp-page-handler="RemoveTask">
+                                <input type="hidden" name="ID" value="@item.ID">
+                                <button class="btn btn-outline-danger">Remove</button>
+                            </form>
+                        </td>
                     </tr>
                 }
             }
@@ -81,11 +87,11 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input asp-for="QuoteModel.Client" placeholder="Client" class="form-control" />
+                <input asp-for="QuoteModel.Client" placeholder="Client" class="form-control" required/>
                 <span asp-validation-for="QuoteModel.Client" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="QuoteModel.Author" placeholder="Author" class="form-control" />
+                <input asp-for="QuoteModel.Author" placeholder="Author" class="form-control" required/>
                 <span asp-validation-for="QuoteModel.Author" class="text-danger"></span>
             </div>
             <div class="form-group">

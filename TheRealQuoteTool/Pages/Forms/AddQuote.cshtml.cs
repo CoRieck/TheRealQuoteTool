@@ -52,6 +52,10 @@ namespace TheRealQuoteTool
             return RedirectToPage("/Forms/AddTask", new { quoteID  = ID});
         }
 
+        public RedirectToPageResult OnPostRemoveTask(int ID)
+        {
+            return RedirectToPage("/Forms/RemoveTask", new { taskID = ID});
+        }
             public async Task OnGetAsync()
         {
             QuoteModelList = await _context.QuoteModel.ToListAsync();
